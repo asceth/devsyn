@@ -51,14 +51,41 @@ class Terrain:
 
     self.geomip_terrain = GeoMipTerrain("geomip_terrain")
     self.geomip_terrain.setHeightfield(Filename(self.map_path + "hmap.png"))
-    self.geomip_terrain.getRoot().setSz(40)
+    self.geomip_terrain.getRoot().setSz(20)
     self.geomip_terrain.setBlockSize(32)
     self.geomip_terrain.setFactor(400)
+    self.geomip_terrain.setMinLevel(1.5)
     self.geomip_terrain.setFocalPoint(base.camera)
-    self.geomip_terrain.getRoot().reparentTo(base.render)
+    self.geomip_terrain.getRoot().reparentTo(self.root)
     self.geomip_terrain.generate()
 
-    self.geomip_terrain.getRoot().setColor(0.0, 0.0, 0.0, 0.0)
+
+    tex0 = base.loader.loadTexture(self.texture_path + "water.jpg")
+    tex0.setMinfilter(Texture.FTLinearMipmapLinear)
+    tex1 = base.loader.loadTexture(self.texture_path + "desert.png")
+    tex1.setMinfilter(Texture.FTLinearMipmapLinear)
+    tex2 = base.loader.loadTexture(self.texture_path + "water.jpg")
+    tex2.setMinfilter(Texture.FTLinearMipmapLinear)
+    tex3 = base.loader.loadTexture(self.texture_path + "rock.png")
+    tex3.setMinfilter(Texture.FTLinearMipmapLinear)
+    tex4 = base.loader.loadTexture(self.texture_path + "desert.png")
+    tex4.setMinfilter(Texture.FTLinearMipmapLinear)
+    tex5 = base.loader.loadTexture(self.texture_path + "sand.jpg")
+    tex5.setMinfilter(Texture.FTLinearMipmapLinear)
+    tex6 = base.loader.loadTexture(self.texture_path + "default.png")
+    tex6.setMinfilter(Texture.FTLinearMipmapLinear)
+
+    # set mutiltextures
+    self.geomip_terrain.getRoot().setTexture( TextureStage('tex0'),tex0 )
+    self.geomip_terrain.getRoot().setTexture( TextureStage('tex1'),tex1 )
+    self.geomip_terrain.getRoot().setTexture( TextureStage('tex2'),tex2 )
+    self.geomip_terrain.getRoot().setTexture( TextureStage('tex3'),tex3 )
+    self.geomip_terrain.getRoot().setTexture( TextureStage('tex4'),tex4 )
+    self.geomip_terrain.getRoot().setTexture( TextureStage('tex5'),tex5 )
+    self.geomip_terrain.getRoot().setTexture( TextureStage('tex6'),tex6 )
+
+    # load shader
+    self.geomip_terrain.getRoot().setShader(base.loader.loadShader(APP_PATH + 'media/cg/terraintexture.sha'))
 
     base.taskMgr.add(self.update_terrain, "update-terrain")
 
