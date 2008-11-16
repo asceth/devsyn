@@ -1,0 +1,12 @@
+salespitch=
+textures=plants2-tex.png plants2.jpg 
+solid-models=muddytree
+name=Plant 2
+license=CCA 2.0
+other-files=plants2.mb 
+id=plant2
+date=2004-12-13
+keywords=Plant
+modeler=Fangwei Lee
+painter=Shao Jie
+animator=

@@ -1,0 +1,12 @@
+salespitch=
+textures=woodenbarrel.png 
+solid-models=woodenbarrel 
+name=Wooden Barrel
+license=CCA 2.0
+other-files=woodenbarrel.mb 
+id=woodenbarrel
+date=2004-12-12
+keywords=Barrel
+modeler=Nikita Pavlov
+painter=Demetrius Jordan\Nikita Pavlov
+animator=

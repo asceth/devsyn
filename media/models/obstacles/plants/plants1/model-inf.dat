@@ -1,0 +1,12 @@
+salespitch=
+textures=plants1-tex.png plants1.jpg 
+solid-models=plants1 
+name=Plant 1
+license=CCA 2.0
+other-files=plants1.mb 
+id=plant1
+date=2004-12-13
+keywords=Plant
+modeler=Fangwei Lee
+painter=Shao Jie
+animator=

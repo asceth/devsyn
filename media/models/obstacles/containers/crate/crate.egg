@@ -1,0 +1,202 @@
+<CoordinateSystem> { Z-Up }
+
+<Comment> {
+  "MaxEggPlugin nul.max -a model -o 'C:\Documents and Settings\CARLOS\Mis documentos\Panda Projects\_models\obstacles\containers\crate\crate.egg'"
+}
+<Texture> Tex1 {
+  crate0.jpg
+  <Scalar> format { rgb }
+  <Scalar> wrapu { repeat }
+  <Scalar> wrapv { repeat }
+  <Scalar> minfilter { linear_mipmap_linear }
+  <Scalar> magfilter { linear }
+}
+<Group> {
+  <Dart> { 1 }
+  <Group> "Scene Root" {
+    <Group> crate {
+      <VertexPool> crate.verts {
+        <Vertex> 0 {
+          1.27 -1.27 2.54152
+          <UV> { 0.486454 0.472824 }
+          <Normal> { 0 -1 0 }
+        }
+        <Vertex> 1 {
+          -1.27 -1.27 2.54152
+          <UV> { 0.0129285 0.472824 }
+          <Normal> { 0 -1 0 }
+        }
+        <Vertex> 2 {
+          -1.27 -1.27 0.00151702
+          <UV> { 0.0129285 0.0241202 }
+          <Normal> { 0 -1 0 }
+        }
+        <Vertex> 3 {
+          1.27 -1.27 0.00151702
+          <UV> { 0.486454 0.0241202 }
+          <Normal> { 0 -1 0 }
+        }
+        <Vertex> 4 {
+          1.27 1.27 2.54152
+          <UV> { 0.982575 0.471729 }
+          <Normal> { 1 0 0 }
+        }
+        <Vertex> 5 {
+          1.27 -1.27 2.54152
+          <UV> { 0.514452 0.471729 }
+          <Normal> { 1 0 0 }
+        }
+        <Vertex> 6 {
+          1.27 -1.27 0.00151702
+          <UV> { 0.514452 0.0281429 }
+          <Normal> { 1 0 0 }
+        }
+        <Vertex> 7 {
+          1.27 1.27 0.00151702
+          <UV> { 0.982575 0.0281429 }
+          <Normal> { 1 0 0 }
+        }
+        <Vertex> 8 {
+          -1.27 1.27 2.54152
+          <UV> { 0.486454 0.472824 }
+          <Normal> { 0 1 0 }
+        }
+        <Vertex> 9 {
+          1.27 1.27 2.54152
+          <UV> { 0.0129285 0.472824 }
+          <Normal> { 0 1 0 }
+        }
+        <Vertex> 10 {
+          1.27 1.27 0.00151702
+          <UV> { 0.0129285 0.0241202 }
+          <Normal> { 0 1 0 }
+        }
+        <Vertex> 11 {
+          -1.27 1.27 0.00151702
+          <UV> { 0.486454 0.0241202 }
+          <Normal> { 0 1 0 }
+        }
+        <Vertex> 12 {
+          -1.27 -1.27 2.54152
+          <UV> { 0.982575 0.471729 }
+          <Normal> { -1 0 0 }
+        }
+        <Vertex> 13 {
+          -1.27 1.27 2.54152
+          <UV> { 0.514452 0.471729 }
+          <Normal> { -1 0 0 }
+        }
+        <Vertex> 14 {
+          -1.27 1.27 0.00151702
+          <UV> { 0.514452 0.0281429 }
+          <Normal> { -1 0 0 }
+        }
+        <Vertex> 15 {
+          -1.27 -1.27 0.00151702
+          <UV> { 0.982575 0.0281429 }
+          <Normal> { -1 0 0 }
+        }
+        <Vertex> 16 {
+          1.27 1.27 2.54152
+          <UV> { 0.486642 0.970819 }
+          <Normal> { 0 0 1 }
+        }
+        <Vertex> 17 {
+          -1.27 1.27 2.54152
+          <UV> { 0.0141213 0.970819 }
+          <Normal> { 0 0 1 }
+        }
+        <Vertex> 18 {
+          -1.27 -1.27 2.54152
+          <UV> { 0.0141213 0.498298 }
+          <Normal> { 0 0 1 }
+        }
+        <Vertex> 19 {
+          1.27 -1.27 2.54152
+          <UV> { 0.486642 0.498298 }
+          <Normal> { 0 0 1 }
+        }
+        <Vertex> 20 {
+          1.27 -1.27 0.00151702
+          <UV> { 0.97895 0.968976 }
+          <Normal> { 0 0 -1 }
+        }
+        <Vertex> 21 {
+          -1.27 -1.27 0.00151702
+          <UV> { 0.511016 0.968976 }
+          <Normal> { 0 0 -1 }
+        }
+        <Vertex> 22 {
+          -1.27 1.27 0.00151702
+          <UV> { 0.511016 0.501041 }
+          <Normal> { 0 0 -1 }
+        }
+        <Vertex> 23 {
+          1.27 1.27 0.00151702
+          <UV> { 0.97895 0.501041 }
+          <Normal> { 0 0 -1 }
+        }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 0 1 2 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 3 0 2 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 4 5 6 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 7 4 6 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 8 9 10 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 11 8 10 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 12 13 14 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 15 12 14 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 16 17 18 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 19 16 18 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 20 21 22 <Ref> { crate.verts } }
+      }
+      <Polygon> {
+        <RGBA> { 1 1 1 1 }
+        <TRef> { Tex1 }
+        <VertexRef> { 23 20 22 <Ref> { crate.verts } }
+      }
+    }
+  }
+}
