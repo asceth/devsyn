@@ -51,6 +51,13 @@ class Picker(DirectObject.DirectObject):
     elif button == 3:
       self.mouse_right(picked_object, picked_point)
 
+  def pick(self, x, y):
+    # locate ray from camera lens to mouse coords
+    self.rayNP.reparentTo(base.camera)
+    self.ray.setFromLens(base.camNode, x, y)
+
+    # get collision: picked object and point
+    return self.get_collision(self.queue)
 
   def get_collision(self, queue):
     # do the traversal
