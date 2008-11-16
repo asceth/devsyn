@@ -11,6 +11,7 @@ loadPrcFileData('', 'win-origin 450 90')
 loadPrcFileData('', 'frame-rate-meter-scale 0.035')
 loadPrcFileData('', 'frame-rate-meter-side-margin 0.1')
 loadPrcFileData("", "prefer-parasite-buffer #f")
+loadPrcFileData('', 'show-frame-rate-meter #t')
 
 loadPrcFileData('', 'load-display pandagl')
 #loadPrcFileData('', 'load-display pandadx9')
@@ -28,12 +29,13 @@ __builtin__.APP_PATH = Filename.fromOsSpecific(os.path.abspath(os.path.join(sys.
 import direct.directbase.DirectStart
 from direct.showbase.DirectObject import DirectObject
 from direct.gui.OnscreenText import OnscreenText, TextNode
-from pandac.PandaModules import NodePath
+from pandac.PandaModules import NodePath, Vec3
 from pandac.PandaModules import CollisionTraverser, CollisionHandlerPusher
 
 import picker, terrain, lighting
 from cameras import FreeLookCamera, FirstPersonCamera
 from entities import Player
+from procedural.trees import SimpleTree
 
 
 base = __builtin__.base
@@ -60,10 +62,7 @@ class Main(DirectObject):
     self.free_look_camera = None
     self.avatars = None
     self.camera_type = "free_look"
-
-    # Collisions!
-    base.cTrav = CollisionTraverser()
-    base.pusher = CollisionHandlerPusher()
+    self.trees = []
 
     # Initialize World
     self.root = NodePath("rootMain")
@@ -73,7 +72,7 @@ class Main(DirectObject):
     self.picker = picker.Picker(self)
 
     # Initialize Terrain
-    self.terrain = terrain.Terrain(self, 65, 1.0, 20.0, 'advanced', False)
+    self.terrain = terrain.Terrain(self, 65, 2.0, 20.0, 'advanced', False)
 
     # Initialize Player
     self.player = Player(Filename("avatars/ralph/ralph.egg.pz"))
@@ -99,11 +98,6 @@ class Main(DirectObject):
                         pos = pos, align = TextNode.ALeft, scale = .035,
                         mayChange = True)
 
-  def collision_traverse(self, task):
-    x = self.player.getX()
-    y = self.player.getY()
-    self.player.setZ(self.terrain.getElevation(x, y) + 0.25)
-
 
   """keys"""
   def keys(self):
@@ -111,8 +105,19 @@ class Main(DirectObject):
     self.accept('t', self.toggle_texture)
     self.accept('r', self.snapshot)
     self.accept('q', self.switch_camera)
+    self.accept('f', self.grow_tree)
     self.accept('escape', sys.exit)
     return
+
+  def grow_tree(self):
+    picked_object, picked_point = self.picker.pick(0.0, 0.0)
+
+    if picked_object is None:
+      return
+    else:
+      tree = SimpleTree(0.01, Vec3(0.05, 0.05, 0.2), picked_point)
+      tree.generate()
+      self.trees.append(tree)
 
   def snapshot(self):
     base.screenshot("snapshot")
