@@ -19,24 +19,9 @@ class Player(Entity):
 
   def __init__(self, model):
     Entity.__init__(self, model)
-    self.create_collisions()
 
     base.taskMgr.add(self.move_update, 'player-move-task')
     #base.taskMgr.add(self.jump_update, 'player-jump-task')
-
-  def create_collisions(self):
-    """ create collision solid and ray for the player """
-    # floor collisions
-    ray = CollisionRay()
-    ray.setOrigin(0, 0, 1)
-    ray.setDirection(0, 0, -1)
-    cn = CollisionNode('player-ray')
-    cn.addSolid(ray)
-    cn.setFromCollideMask(BitMask32.bit(0))
-    cn.setIntoCollideMask(BitMask32.allOff())
-    solid = self.prime.attachNewNode(cn)
-    self.node_ground_handler = CollisionHandlerQueue()
-    base.cTrav.addCollider(solid, self.node_ground_handler)
 
   def activate(self):
     self.accept_controls()
