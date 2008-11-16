@@ -33,7 +33,7 @@ class Lighting:
     self.fog.setMode(Fog.MLinear)
     self.fog.setLinearRange(14.0,40.0)
     self.fog.setColor(*colour)
-    base.render.setFog(self.fog)
+    #base.render.setFog(self.fog)
 
 
 
