@@ -46,8 +46,12 @@ class FirstPersonCamera(Entity):
         self.parent = parent.prime
       else:
         self.parent = parent
+
     # attach to our parent
     self.attachTo(self.parent)
+    # has to be a way to get the height of the model....
+    self.setZ(self.getZ() + 1.0)
+    self.parent.hide()
 
   def update(self, task):
     # rotate the camera
@@ -65,7 +69,7 @@ class FirstPersonCamera(Entity):
     camright = base.camera.getNetTransform().getMat().getRow3(0)
     camright.normalize()
     base.camera.setH(base.camera.getH() -
-                       (d[0] * self.rotation_velocity))
+                     (d[0] * self.rotation_velocity))
 
     # rotate camera using z vector (up/down)
     camup = base.camera.getNetTransform().getMat().getRow3(2)
