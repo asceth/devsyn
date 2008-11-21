@@ -1,161 +1,118 @@
-title = "DevSyn RPG Prototype"
+#!/usr/bin/env python
+__all__ = []
 
-import sys, __builtin__, os
-
-# Setup config file
-from pandac.PandaModules import loadPrcFileData, Filename
-
-loadPrcFileData('', 'fullscreen 0')
-loadPrcFileData('', 'win-size 800 600')
-loadPrcFileData('', 'win-origin 450 90')
-loadPrcFileData('', 'frame-rate-meter-scale 0.035')
-loadPrcFileData('', 'frame-rate-meter-side-margin 0.1')
-loadPrcFileData("", "prefer-parasite-buffer #f")
-loadPrcFileData('', 'show-frame-rate-meter #t')
-
-loadPrcFileData('', 'load-display pandagl')
-#loadPrcFileData('', 'load-display pandadx9')
-loadPrcFileData( '', 'notify-level-util error' )
-loadPrcFileData( '', 'window-title '+title )
+import sys
+import os
+import __builtin__
+from optparse import OptionParser, OptionGroup, OptionValueError
 
 
-loadPrcFileData("", "interpolate-frames 1")
-loadPrcFileData("", "clock-mode limited")
-loadPrcFileData("", "clock-frame-rate 60")
+from pandac.PandaModules import Filename
+from pandac.PandaModules import loadPrcFileData
 
-# Find out the application path
-__builtin__.APP_PATH = Filename.fromOsSpecific(os.path.abspath(os.path.join(sys.path[0],".."))).getFullpath()+"/"
+__builtin__.WINDOW_TITLE = "DevSyn Prototype"
+__builtin__.GAME = "rpg"
+__builtin__.FULLSCREEN = False
+__builtin__.SHOW_FPS = True # FPS meter in the top right corner of the screen
+__builtin__.DEBUG_MODE = False # offers gadgets useful for debugging
+__builtin__.ENABLE_DIRECTTOOLS = False # for heavy debugging
+__builtin__.ENABLE_PSTATS = False # whether to enable performance statistics or not
+__builtin__.INTERPOLATE_FRAMES = True # smooth frame interpolation for low framerates
+__builtin__.LOAD_DISPLAY = "gl" # either gl or dx9 or dx8
+__builtin__.RESOLUTION = None # either a two-tuple or None, which means auto
+__builtin__.WIN_SIZE = (1024, 768) # the window size, when running windowed
+__builtin__.APP_PATH = Filename.fromOsSpecific(os.path.abspath(os.path.join(sys.path[0],".."))).getFullpath() + "/"
+
+from core import Config
+
+__builtin__.CONFIG = Config()
+__builtin__.CONFIG.load(__builtin__.CONFIG.make_filename())
+__builtin__.CONFIG.parse_into_object(__builtin__)
+
+# parse command line options
+def validate_resolution_size(option, opt_str, value, parser):
+  dmode = value.lower().split("x")
+  try:
+    if(len(dmode) != 2):
+      raise
+    dmode = (int(dmode[0]), int(dmode[1]))
+    assert dmode[0] >= 0 and dmode[1] >= 0
+  except:
+    raise OptionValueError("Invalid display mode! Must be in the form of -s WxH or --size=WxH.")
+  setattr(parser.values, option.dest, tuple(dmode))
+
+
+parser = OptionParser("usage: main.py [options]", version="DevSyn Prototypes")
+parser.add_option("-g", "--game", action="store", dest="game",
+                  default=__builtin__.GAME,
+                  help="run the specified game")
+parser.add_option("-f", "--fullscreen", action="store_true",
+                  dest="fullscreen", default=__builtin__.FULLSCREEN,
+                  help="run devsyn as fullscreen")
+parser.add_option("-w", "--windowed", action="store_false",
+                  dest="fullscreen", help="run devsyn in windowed mode")
+parser.add_option("-r", "--res", action="callback",
+                  callback=validate_resolution_size, type=str,
+                  nargs=1, dest="size", default="",
+                  help="use the specified resolution or window size")
+parser.add_option("--use-cache", action="store_true", dest="cache",
+                  default=__builtin__.USE_CACHE,
+                  help="make use of texture caching")
+parser.add_option("--no-cache", action="store_false", dest="cache",
+                  help="don't use the texture cache")
+group = OptionGroup(parser, "Debug Options",
+                    "These are options useful for debugging purposes.")
+group.add_option("-p", "--pstats", action="store_true", dest="pstats",
+                 default=__builtin__.ENABLE_PSTATS,
+                 help="try to connect to the performance analysis tool")
+group.add_option("-d", "--debug", action="store_true", dest="debug",
+                 default=__builtin__.DEBUG_MODE,
+                 help="run devsyn in debug mode")
+group.add_option("-a", "--analyze", action="store_true", dest="analyze",
+                 default=__builtin__.ENABLE_DIRECTTOOLS,
+                 help="show the analyzer window")
+parser.add_option_group(group)
+
+args = parser.parse_args()[0]
+DEBUG_MODE = args.debug
+ENABLE_DIRECTTOOLS = args.analyze
+ENABLE_PSTATS = args.pstats
+FULLSCREEN = args.fullscreen
+USE_CACHE = args.cache
+RESOLUTION = args.size
+WIN_SIZE = args.size
+GAME = args.game
+LOAD_DISPLAY = __builtin__.LOAD_DISPLAY
+WINDOW_TITLE = __builtin__.WINDOW_TITLE
+INTERPOLATE_FRAMES = __builtin__.INTERPOLATE_FRAMES
+SHOW_FPS = __builtin__.SHOW_FPS
+
+# put everything under a "try" now, to catch errors
+cfg_string = ""
+if(DEBUG_MODE): cfg_string += "notify-level-glgsg debug\n"
+cfg_string += "basic-shaders-only 1\n"
+cfg_string += "sync-video 0\n"
+cfg_string += "win-origin 0 0\n"
+if(LOAD_DISPLAY.startswith("panda")):
+  cfg_string += "load-display %s\n" % LOAD_DISPLAY
+else:
+  cfg_string += "load-display panda%s\n" % LOAD_DISPLAY
+# cfg_string += "prefer-parasite-buffer 0\n"
+cfg_string += "want-directtools %d\n" % ENABLE_DIRECTTOOLS
+cfg_string += "want-pstats %d\n" % ENABLE_PSTATS
+cfg_string += "task-timer-verbose %d\n" % ENABLE_PSTATS
+cfg_string += "pstats-tasks %d\n" % ENABLE_PSTATS
+cfg_string += "window-title %s\n" % WINDOW_TITLE
+cfg_string += "interpolate-frames %d\n" % INTERPOLATE_FRAMES
+cfg_string += "show-frame-rate-meter %d\n" % SHOW_FPS
+cfg_string += "fullscreen %d\nundecorated %d\n" % (FULLSCREEN, FULLSCREEN)
+loadPrcFileData("", cfg_string)
 
 import direct.directbase.DirectStart
-from direct.showbase.DirectObject import DirectObject
-from direct.gui.OnscreenText import OnscreenText, TextNode
-from pandac.PandaModules import NodePath, Vec3
-from pandac.PandaModules import CollisionTraverser, CollisionHandlerPusher
 
-import picker, terrain, lighting
-from cameras import FreeLookCamera, FirstPersonCamera
-from entities import Player
-from procedural.trees import SimpleTree
+# Load the game
+exec "from " + args.game + " import Game"
 
-
-base = __builtin__.base
-APP_PATH = __builtin__.APP_PATH
-
-
-# Main Class
-class Main(DirectObject):
-  """initialize"""
-  def __init__(self):
-    print "______________________"
-    print "Class Main"
-
-    print "APP Path: ", __builtin__.APP_PATH
-
-    base.disableMouse()
-
-    # Setup application
-    self.keys()
-    self.txt = self.info((-1.32, 0.96), title)
-
-    # Initialize classes
-    self.grid = None
-    self.free_look_camera = None
-    self.avatars = None
-    self.camera_type = "free_look"
-    self.trees = []
-
-    # Initialize World
-    self.root = NodePath("rootMain")
-    self.root.reparentTo(base.render)
-
-    # Initialize Picker
-    self.picker = picker.Picker(self)
-
-    # Initialize Terrain
-    self.terrain = terrain.Terrain(self, 65, 2.0, 20.0, 'advanced', False)
-
-    # Initialize Player
-    self.player = Player(Filename("avatars/ralph/ralph.egg.pz"))
-    self.player.reparentTo(base.render)
-    self.player.setScale(0.05)
-
-    # Initialize Cameras
-    self.free_look_camera = FreeLookCamera()
-    self.first_person_camera = FirstPersonCamera()
-
-    # Initialize Lights
-    self.lights = lighting.Lighting(self)
-
-    # Activate Free Look
-    self.free_look_camera.activate()
-
-    return
-
-  """info"""
-  def info(self, pos, msg):
-    self.font = base.loader.loadFont(APP_PATH + 'media/fonts/OCR.otf')
-    return OnscreenText(font = self.font, text = msg, style = 1, fg = (1, 1, 1, 1),
-                        pos = pos, align = TextNode.ALeft, scale = .035,
-                        mayChange = True)
-
-
-  """keys"""
-  def keys(self):
-    self.accept('e', self.toggle_wire_frame)
-    self.accept('t', self.toggle_texture)
-    self.accept('r', self.snapshot)
-    self.accept('q', self.switch_camera)
-    self.accept('f', self.grow_tree)
-    self.accept('escape', sys.exit)
-    return
-
-  def grow_tree(self):
-    picked_object, picked_point = self.picker.pick(0.0, 0.0)
-
-    if picked_object is None:
-      return
-    else:
-      tree = SimpleTree(0.01, Vec3(0.05, 0.05, 0.2), picked_point)
-      tree.generate()
-      self.trees.append(tree)
-
-  def snapshot(self):
-    base.screenshot("snapshot")
-
-  def toggle_wire_frame(self):
-    base.toggleWireframe()
-
-  def toggle_texture(self):
-    base.toggleTexture()
-
-  def switch_camera(self):
-    print "Switching Cameras"
-    if self.camera_type == "free_look":
-      self.free_look_camera.deactivate()
-
-      self.player.activate()
-      self.player.setPos(base.camera.getPos())
-      self.first_person_camera.activate(False)
-      self.first_person_camera.reset_parent(self.player)
-
-      base.taskMgr.add(self.collision_traverse, "ctrav-traverse")
-      self.camera_type = "first_person"
-    elif self.camera_type == "first_person":
-      self.player.deactivate()
-      self.first_person_camera.deactivate()
-      self.free_look_camera.activate()
-      base.taskMgr.remove("ctrav-traverse")
-      self.camera_type = "free_look"
-    else:
-      self.player.deactivate()
-      self.first_person_camera.deactivate()
-      self.free_look_camera.activate()
-      base.taskMgr.remove("ctrav-traverse")
-      self.camera_type = "free_look"
-
-
-main = Main()
-base.taskMgr.run()
-
-
+game = Game()
+__builtin__.base.taskMgr.run()
 
