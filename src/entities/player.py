@@ -6,8 +6,8 @@ from entities import Entity
 base = __builtin__.base
 
 class Player(Entity):
-  speed = 50
-  FORWARD = Vec3(0,2,0) # faster forward than backward
+  speed = 100
+  FORWARD = Vec3(0,1,0) # faster forward than backward
   BACK = Vec3(0,-1,0)
   LEFT = Vec3(-1,0,0)
   RIGHT = Vec3(1,0,0)
@@ -19,15 +19,26 @@ class Player(Entity):
 
   def __init__(self, model):
     Entity.__init__(self, model)
+    self.create_collisions()
 
-    base.taskMgr.add(self.move_update, 'player-move-task')
-    #base.taskMgr.add(self.jump_update, 'player-jump-task')
+  def create_collisions(self):
+    self.queue = CollisionHandlerQueue()
+    self.rayNP = self.get_model().attachNewNode(CollisionNode('player-ray'))
+    self.ray = CollisionRay(0, 0, 1, 0, 0, -1)
+    self.rayNP.node().addSolid(self.ray)
+    self.rayNP.node().setFromCollideMask(GeomNode.getDefaultCollideMask())
+    base.cTrav.addCollider(self.rayNP, self.queue)
+    self.rayNP.show()
 
   def activate(self):
     self.accept_controls()
+    base.taskMgr.add(self.move_update, 'player-move-task')
+    base.taskMgr.add(self.jump_update, 'player-jump-task', 40)
 
   def deactivate(self):
     self.ignore_controls()
+    base.taskMgr.remove('player-move-task')
+    base.taskMgr.remove('player-jump-task')
 
   def accept_controls(self):
     """ attach key events """
@@ -67,20 +78,18 @@ class Player(Entity):
   def jump_update(self, task):
     """ this task simulates gravity and makes the player jump """
     # get the highest Z from the down casting ray
-    highestZ = -100
-    for i in range(self.node_ground_handler.getNumEntries()):
-      entry = self.node_ground_handler.getEntry(i)
-      z = entry.getSurfacePoint(render).getZ()
-      if z > highestZ and entry.getIntoNode().getName() == "Cube":
-        highestZ = z
+    for i in range(self.queue.getNumEntries()):
+      entry = self.queue.getEntry(i)
+      z = entry.getSurfacePoint(base.render).getZ()
+      self.setZ(z + 0.00001)
 
     # gravity effects and jumps
-    self.setZ(self.getZ() + self.jump * globalClock.getDt())
-    self.jump -= 1 * globalClock.getDt()
-    if highestZ > self.getZ() - 0.3:
-      self.jump = 0
-      self.setZ(highestZ + 0.3)
-      if self.ready_to_jump:
-        self.jump = 1
+    #self.setZ(self.getZ() + self.jump * globalClock.getDt())
+    #self.jump -= 1 * globalClock.getDt()
+    #if highestZ > self.getZ() - 0.3:
+    #  self.jump = 0
+    #  self.setZ(highestZ + 0.3)
+    #  if self.ready_to_jump:
+    #    self.jump = 1
 
     return task.cont
