@@ -44,6 +44,7 @@ class FreeLookCamera(Entity):
     base.camera.reparentTo(base.render) # attach it to the render
     ## set position
     base.camera.setPos(position)
+    base.camera.setR(0)
 
     # initialize mouse controls
     ## walking and stopping if input is lost
