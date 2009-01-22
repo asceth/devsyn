@@ -31,6 +31,7 @@ class Entity(DirectObject, object):
             path = model
           else:
             path = APP_PATH + "media/models/" + model
+            print "path: ", path
             if Filename(path).exists():
               pass
             elif Filename(path + ".bam").exists():
@@ -50,7 +51,7 @@ class Entity(DirectObject, object):
             self.model = model
           self.prime = base.loader.loadModel(path)
         if self.prime == None:
-          print ":object(error): can't load model", path, "!"
+          print ":object(error): can't load model", model, "!"
           # Probably shouldn't exit because of this
           sys.exit(1)
 

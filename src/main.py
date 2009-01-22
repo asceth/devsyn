@@ -6,7 +6,6 @@ import os
 import __builtin__
 from optparse import OptionParser, OptionGroup, OptionValueError
 
-
 from pandac.PandaModules import Filename
 from pandac.PandaModules import loadPrcFileData
 
