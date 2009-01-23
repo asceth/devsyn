@@ -1,0 +1,24 @@
+You must have Panda3d (http://panda3d.org) already installed on your
+system in a way that python can find it.
+
+There are windows installers and *nix platform packages from the panda3d
+site itself.  It is possible to use panda3d on a OSX by compiling from source.
+For OSX http://www.edalytical.com/articles/building_panda3d_on_mac_os_x_leopard.html
+may be of interest.
+
+
+
+
+Running:
+
+> cd src/
+> python main.py     # by default runs the game under rpg/
+
+
+In rpg game:
+
+wasd -> move camera
+mouse look -> look around with camera
+f -> spawn a procedurally generated tree on the terrain
+
+terrain is also procedurally generated everytime you load it up
