@@ -9,7 +9,7 @@ from optparse import OptionParser, OptionGroup, OptionValueError
 from pandac.PandaModules import Filename
 from pandac.PandaModules import loadPrcFileData
 
-__builtin__.WINDOW_TITLE = "DevSyn Prototype"
+__builtin__.WINDOW_TITLE = "DevSyn Games"
 __builtin__.GAME = "rpg"
 __builtin__.FULLSCREEN = False
 __builtin__.SHOW_FPS = True # FPS meter in the top right corner of the screen
@@ -20,9 +20,9 @@ __builtin__.INTERPOLATE_FRAMES = True # smooth frame interpolation for low frame
 __builtin__.LOAD_DISPLAY = "gl" # either gl or dx9 or dx8
 __builtin__.RESOLUTION = None # either a two-tuple or None, which means auto
 __builtin__.WIN_SIZE = (1024, 768) # the window size, when running windowed
-__builtin__.APP_PATH = Filename.fromOsSpecific(os.path.abspath(os.path.join(sys.path[0],".."))).getFullpath() + "/"
+__builtin__.APP_PATH = Filename.fromOsSpecific(os.path.abspath(os.path.join(sys.path[0]))).getFullpath() + "/"
 
-from core import Config
+from devsyn.core import Config
 
 __builtin__.CONFIG = Config()
 __builtin__.CONFIG.load(__builtin__.CONFIG.make_filename())
@@ -110,7 +110,7 @@ loadPrcFileData("", cfg_string)
 import direct.directbase.DirectStart
 
 # Load the game
-exec "from " + args.game + " import Game"
+exec "from games." + args.game + " import Game"
 
 game = Game()
 __builtin__.base.taskMgr.run()

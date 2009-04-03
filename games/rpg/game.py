@@ -7,10 +7,10 @@ from direct.showbase.DirectObject import DirectObject
 from direct.gui.OnscreenText import OnscreenText, TextNode
 from pandac.PandaModules import NodePath, Vec3, Filename
 
-from rpg import picker, terrain, lighting
-from cameras import FreeLookCamera, FirstPersonCamera
-from entities import Player
-from procedural.trees import SimpleTree
+from games.rpg import picker, terrain, lighting
+from devsyn.cameras import FreeLookCamera, FirstPersonCamera
+from devsyn.entities import Player
+from devsyn.procedural.trees import SimpleTree
 
 
 base = __builtin__.base
@@ -49,7 +49,7 @@ class Game(DirectObject):
     self.terrain = terrain.Terrain(self, 65, 2.0, 20.0, 'advanced', False)
 
     # Initialize Player
-    self.player = Player(Filename("avatars/ralph/ralph.egg.pz"))
+    self.player = Player(Filename("media/models/avatars/ralph/ralph"))
     self.player.reparentTo(base.render)
     self.player.setScale(0.05)
 

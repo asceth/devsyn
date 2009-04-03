@@ -2,7 +2,7 @@ import __builtin__
 from pandac.PandaModules import Vec3, WindowProperties
 from direct.task.Task import Task
 
-from entities import Entity
+from devsyn.entities import Entity
 
 base = __builtin__.base
 
@@ -25,8 +25,8 @@ class GodCamera(Entity):
     ## keeps track of mouse movement
     self.pos = [0.0, 0.0]
 
-  def activate(self, position = Vec3(0, 0, 20.0)):
-    print "Activating FreeLook Camera"
+  def activate(self, position = Vec3(0, 0, 0)):
+    print "Activating God Camera"
     # No moar cursor!
     wp = WindowProperties()
     wp.setCursorHidden(True)
@@ -58,7 +58,7 @@ class GodCamera(Entity):
     base.taskMgr.add(self.update, "update_camera_task")
 
   def deactivate(self):
-    print "Deactivating FreeLook Camera"
+    print "Deactivating God Camera"
     # No moar cursor!
     wp = WindowProperties()
     wp.setCursorHidden(True)

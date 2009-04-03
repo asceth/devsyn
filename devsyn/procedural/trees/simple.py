@@ -7,8 +7,8 @@ from pandac.PandaModules import GeomVertexReader, GeomTristrips, CullFaceAttrib
 from pandac.PandaModules import GeomNode, NodePath, Mat4, Vec4, TransformState
 from pandac.PandaModules import GeomVertexArrayFormat, InternalName
 
-from entities import Entity
-from procedural.utility import ProceduralUtility
+from devsyn.entities import Entity
+from devsyn.procedural.utility import ProceduralUtility
 
 APP_PATH = __builtin__.APP_PATH
 base = __builtin__.base

@@ -8,7 +8,7 @@ from pandac.PandaModules import PNMImage, Filename, BitMask32
 from pandac.PandaModules import GeoMipTerrain, TextureStage
 
 import meshes
-from maps import DiamondMap
+from devsyn.maps import DiamondMap
 
 APP_PATH = __builtin__.APP_PATH
 base = __builtin__.base

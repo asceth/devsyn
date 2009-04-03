@@ -24,32 +24,35 @@ class Entity(DirectObject, object):
       elif isinstance(model, NodePath):
         self.prime = model
       else:
-        if isinstance(model, Filename):
-          model = model.getFullpath()
-          if Filename(model).exists():
-            self.model = Filename(model).getBasenameWoExtension()
-            path = model
+        if Filename(model).exists():
+          self.model = Filename(model).getBasenameWoExtension()
+          path = model
+        else:
+          if isinstance(model, Filename):
+            self.model = model.getBasenameWoExtension()
+            path = model.getFullpath()
           else:
-            path = APP_PATH + "media/models/" + model
-            print "path: ", path
-            if Filename(path).exists():
-              pass
-            elif Filename(path + ".bam").exists():
-              path += ".bam"
-            elif Filename(path + ".bam.pz").exists():
-              path += ".bam.pz"
-            elif Filename(path + ".egg").exists():
-              path += ".egg"
-            elif Filename(path + ".egg.pz").exists():
-              path += ".egg.pz"
-            elif Filename(path + ".x").exists():
-              path += ".x"
-            else:
-              print ":object(error): can't find model", model, "!"
-              # Probably shouldn't exit because of this
-              sys.exit(1)
-            self.model = model
-          self.prime = base.loader.loadModel(path)
+            path = APP_PATH + model
+
+          print "path: ", path
+          if Filename(path).exists():
+            pass
+          elif Filename(path + ".bam").exists():
+            path += ".bam"
+          elif Filename(path + ".bam.pz").exists():
+            path += ".bam.pz"
+          elif Filename(path + ".egg").exists():
+            path += ".egg"
+          elif Filename(path + ".egg.pz").exists():
+            path += ".egg.pz"
+          elif Filename(path + ".x").exists():
+            path += ".x"
+          else:
+            print ":object(error): can't find model", model, "!"
+            # Probably shouldn't exit because of this
+            sys.exit(1)
+          self.model = model
+        self.prime = base.loader.loadModel(path)
         if self.prime == None:
           print ":object(error): can't load model", model, "!"
           # Probably shouldn't exit because of this

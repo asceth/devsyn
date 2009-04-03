@@ -8,10 +8,12 @@ import cPickle
 
 from direct.showbase.DirectObject import DirectObject
 from direct.gui.OnscreenText import OnscreenText, TextNode
-from pandac.PandaModules import NodePath, Vec3, Filename
+from pandac.PandaModules import NodePath, Vec3, Filename, Point2
 
-from cameras import GodCamera
+from cameras import FreeLookCamera, GodCamera
 from entities import Sprite
+
+from player import Player
 
 base = __builtin__.base
 APP_PATH = __builtin__.APP_PATH
@@ -40,8 +42,26 @@ class Game(DirectObject):
     self.title_text = self.info((-1.32, 0.96), title)
 
     base.disableMouse()
-    self.ship = Sprite("ship")
+    #base.camLens.setNear(0.0001)
 
+    self.ship = Player()
+    self.ship.activate()
+
+    self.stars = Sprite("media/textures/asteroids/stars", depth = 60, scale = 146, transparency = False)
+
+    # Initialize Cameras
+    self.god_camera = GodCamera()
+
+    # Activate Free Look
+    self.god_camera.activate()
+    print "pos: ", self.ship.getPos()
+
+    self.accept("r", self.snapshot)
+    self.accept("escape", sys.exit)
+
+  """take a snapshot"""
+  def snapshot(self):
+    base.screenshot("snapshot")
 
   """info"""
   def info(self, pos, msg):

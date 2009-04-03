@@ -2,7 +2,7 @@ import __builtin__
 from direct.showbase.DirectObject import DirectObject
 from direct.task.Task import Task
 
-from entities import Entity
+from devsyn.entities import Entity
 
 base = __builtin__.base
 

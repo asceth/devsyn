@@ -1,7 +1,7 @@
 import __builtin__
 
-from pandac.PandaModules import Point2
-from entities import Entity
+from pandac.PandaModules import Point2, Point3
+from devsyn.entities import Entity
 
 base = __builtin__.base
 APP_PATH = __builtin__.APP_PATH
@@ -9,8 +9,8 @@ APP_PATH = __builtin__.APP_PATH
 class Sprite(Entity):
   def __init__(self, texture = None, position = Point2(0, 0), depth = 55, scale = 1,
                transparency = True):
-    Entity.__init__(self, "shapes/plane")
-    self.prime.reparentTo(base.camera)
+    Entity.__init__(self, "media/models/shapes/plane")
+    self.prime.reparentTo(base.render)
     self.prime.setPos(Point3(position.getX(), depth, position.getY()))
     self.prime.setScale(scale)
 
@@ -24,16 +24,12 @@ class Sprite(Entity):
       self.prime.setTransparency(1)
 
     if texture:
-      self.texture = base.loader.loadTexture(APP_PATH + "media/textures/" +
-                                             texture + ".png")
+      self.texture = base.loader.loadTexture(APP_PATH + texture + ".png")
       self.prime.setTexture(self.texture, 1)
 
   def activate(self):
-    self.accept_controls()
-    base.taskMgr.add(self.move_update, 'player-move-task')
-    base.taskMgr.add(self.jump_update, 'player-jump-task', 40)
+    pass
 
   def deactivate(self):
-    self.ignore_controls()
-    base.taskMgr.remove('player-move-task')
-    base.taskMgr.remove('player-jump-task')
+    pass
+

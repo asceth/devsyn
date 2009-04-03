@@ -1,7 +1,7 @@
 import __builtin__
 
 from pandac.PandaModules import *
-from entities import Entity
+from devsyn.entities import Entity
 
 base = __builtin__.base
 
