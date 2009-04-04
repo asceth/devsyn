@@ -21,9 +21,6 @@ class GodCamera(Entity):
 
   def __init__(self):
     """initialize"""
-    # basic properties
-    ## keeps track of mouse movement
-    self.pos = [0.0, 0.0]
 
   def activate(self, position = Vec3(0, 0, 0)):
     print "Activating God Camera"
@@ -36,11 +33,10 @@ class GodCamera(Entity):
     base.win.requestProperties(wp)
 
     # initialize camera
-    base.camLens.setFov(55) # field of view
     base.camera.reparentTo(base.render) # attach it to the render
     ## set position
     base.camera.setPos(position)
-    base.camera.setHpr(0, 0, -90)
+    base.camera.setHpr(0, 0, 0)
     self.prime = base.camera
 
     # initialize mouse controls
@@ -61,7 +57,7 @@ class GodCamera(Entity):
     print "Deactivating God Camera"
     # No moar cursor!
     wp = WindowProperties()
-    wp.setCursorHidden(True)
+    wp.setCursorHidden(False)
     # does not exist panda 1.3.2 / but is reqired for osx-mouse movement
     try: wp.setMouseMode(WindowProperties.MAbsolute)
     except: pass
@@ -86,8 +82,8 @@ class GodCamera(Entity):
     self.strafe = value
 
   def update(self, task):
-    base.camera.setPos(self.walk * globalClock.getDt() * self.speed)
-    base.camera.setPos(self.strafe * globalClock.getDt() * self.speed)
+    self.setPos(self.walk * globalClock.getDt() * self.speed)
+    self.setPos(self.strafe * globalClock.getDt() * self.speed)
     return Task.cont
 
 
