@@ -7,11 +7,14 @@ from random import randint, choice, random
 import cPickle
 
 from direct.showbase.DirectObject import DirectObject
+from direct.task.Task import Task
 from direct.gui.OnscreenText import OnscreenText, TextNode
 from pandac.PandaModules import NodePath, Vec3, Filename, Point2
 
-from cameras import FreeLookCamera, GodCamera
-from entities import Sprite
+from devsyn.cameras import FreeLookCamera, GodCamera
+from devsyn.entities import Sprite
+from devsyn.physics.xy import pymunk
+from devsyn.physics.xy.pymunk import Vec2d
 
 from player import Player
 
@@ -44,20 +47,48 @@ class Game(DirectObject):
     base.disableMouse()
     #base.camLens.setNear(0.0001)
 
+    self.create_world()
+    base.taskMgr.add(self.step, "physics-step")
+
+    self.stars = Sprite("media/textures/asteroids/stars", depth = 100, scale = 146, transparency = False)
+
+    self.static_body = pymunk.Body(pymunk.inf, pymunk.inf)
+    self.static_lines = [pymunk.Segment(self.static_body, Vec2d(-SCREEN_X, -SCREEN_Y), Vec2d(-SCREEN_X, SCREEN_Y), 0.0),
+                         pymunk.Segment(self.static_body, Vec2d(-SCREEN_X, -SCREEN_Y), Vec2d(SCREEN_X, -SCREEN_Y), 0.0),
+                         pymunk.Segment(self.static_body, Vec2d(SCREEN_X, -SCREEN_Y), Vec2d(SCREEN_X, SCREEN_Y), 0.0),
+                         pymunk.Segment(self.static_body, Vec2d(-SCREEN_X, SCREEN_Y), Vec2d(SCREEN_X, SCREEN_Y), 0.0)
+                         ]
+    for l in self.static_lines:
+      l.friction = 0.3
+      l.elasticity = 0.6
+    self.world.add_static(self.static_lines)
+
+
     self.ship = Player()
     self.ship.activate()
-
-    self.stars = Sprite("media/textures/asteroids/stars", depth = 60, scale = 146, transparency = False)
+    body, shape = self.ship.physical_presence()
+    self.world.add(body, shape)
 
     # Initialize Cameras
     self.god_camera = GodCamera()
 
-    # Activate Free Look
+    # Activate Free Lopok
     self.god_camera.activate()
-    print "pos: ", self.ship.getPos()
 
     self.accept("r", self.snapshot)
     self.accept("escape", sys.exit)
+
+  def create_world(self):
+    pymunk.init_pymunk()
+    self.world = pymunk.Space()
+    self.world._space.contents.elasticIterations = 10
+    self.world.gravity = Vec2d(0.0, 0.0)
+
+  def step(self, task):
+    steps = 10
+    for x in range(steps):
+      self.world.step(1/60.0/steps)
+    return Task.cont
 
   """take a snapshot"""
   def snapshot(self):
